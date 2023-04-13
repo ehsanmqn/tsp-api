@@ -165,7 +165,7 @@ CORS_ORIGIN_WHITELIST = (
 )
 
 # Application defined constants
-MESSAGE_BROKER = 'localhost'
+MESSAGE_BROKER = os.environ.get('MESSAGE_BROKER')
 MESSAGE_BROKER_PORT = 5672
 MESSAGE_BROKER_USERNAME = 'admin'
 MESSAGE_BROKER_PASSWORD = 'admin'
