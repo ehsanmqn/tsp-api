@@ -59,7 +59,7 @@ class VrpSolverTestCase(TestCase):
             "id": "1234",
             "depot": -1,
             "num_vehicles": 1,
-            "locations": [{"latitude": 40.7128, "longitude": -74.0060}]
+            "locations": json.dumps([{"latitude": 40.7128, "longitude": -74.0060}])
         }
 
         # post the request to the API endpoint
@@ -70,3 +70,39 @@ class VrpSolverTestCase(TestCase):
 
         # assert that the response message is "Invalid input data"
         self.assertIn("depot", response.data)
+
+    def test_invalid_num_vehicles(self):
+        # create an invalid request data with num_vehicles = 0
+        data = {
+            "id": "1234",
+            "depot": 0,
+            "num_vehicles": -1,
+            "locations": json.dumps([{"latitude": 40.7128, "longitude": -74.0060}])
+        }
+
+        # post the request to the API endpoint
+        response = self.client.post(self.url, data)
+
+        # assert that the response code is 400 Bad Request
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # assert that the response message is "Invalid input data"
+        self.assertIn("num_vehicles", response.data)
+
+    def test_invalid_locations(self):
+        # create an invalid request data with empty locations
+        data = {
+            "id": "1234",
+            "depot": 0,
+            "num_vehicles": 1,
+            "locations": ""
+        }
+
+        # post the request to the API endpoint
+        response = self.client.post(self.url, data)
+
+        # assert that the response code is 400 Bad Request
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # assert that the response message is "Invalid input data"
+        self.assertIn("locations", response.data)
