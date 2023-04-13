@@ -1,0 +1,7 @@
+db.sqlite3
+venv
+*.pyc
+#*/migrations
+*.cpython*
+.idea
+static
