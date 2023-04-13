@@ -14,7 +14,7 @@ connection = pika.BlockingConnection(pika.ConnectionParameters(
     host=settings.MESSAGE_BROKER,
     port=settings.MESSAGE_BROKER_PORT,
     virtual_host='/',
-    heartbeat=300,
+    heartbeat=60,
     credentials=pika.PlainCredentials(settings.MESSAGE_BROKER_USERNAME, settings.MESSAGE_BROKER_PASSWORD)))
 
 channel = connection.channel()
