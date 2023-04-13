@@ -163,3 +163,11 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
     'http://127.0.0.1:3000',
 )
+
+# Application defined constants
+MESSAGE_BROKER = 'localhost'
+MESSAGE_BROKER_PORT = 5672
+MESSAGE_BROKER_USERNAME = 'admin'
+MESSAGE_BROKER_PASSWORD = 'admin'
+TSP_INPUT_QUEUE = 'TSP_INPUT_QUEUE'
+TSP_OUTPUT_QUEUE = 'TSP_OUTPUT_QUEUE'

@@ -19,12 +19,13 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from tspapi_solver.views import VrpSolver
+from tspapi_solver.views import VrpSolverSubmitStateless, VrpSolverGetStatus
 
 #
 # Version 1 APIs
 api_patterns_v1 = [
-    path("vrp/", VrpSolver.as_view(), name="vrp-solver")
+    path("vrp-submit/", VrpSolverSubmitStateless.as_view(), name="vrp-solver-submit-stateless"),
+    path("vrp-status/", VrpSolverGetStatus.as_view(), name="vrp-solver-get-status")
 ]
 
 api_patterns = [
