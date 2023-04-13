@@ -19,9 +19,12 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from tspapi_solver.views import VrpSolver
+
 #
 # Version 1 APIs
 api_patterns_v1 = [
+    path("vrp/", VrpSolver.as_view(), name="vrp-solver")
 ]
 
 api_patterns = [
