@@ -14,10 +14,11 @@ connection = pika.BlockingConnection(pika.ConnectionParameters(
     host=settings.MESSAGE_BROKER,
     port=settings.MESSAGE_BROKER_PORT,
     virtual_host='/',
-    heartbeat=60,
+    heartbeat=0,
     credentials=pika.PlainCredentials(settings.MESSAGE_BROKER_USERNAME, settings.MESSAGE_BROKER_PASSWORD)))
 
 channel = connection.channel()
+channel.heartbeat_interval = 0
 channel.queue_declare(queue=settings.TSP_INPUT_QUEUE)
 channel.queue_declare(queue=settings.TSP_OUTPUT_QUEUE)
 
