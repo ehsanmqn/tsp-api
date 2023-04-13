@@ -6,11 +6,11 @@ from rest_framework.test import APIClient
 from rest_framework import status
 
 
-class VrpSolverTestCase(TestCase):
+class VrpSolverSubmitStatelessTestCase(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.url = reverse("vrp-solver")
+        self.url = reverse("vrp-solver-submit-stateless")
 
     def test_valid_request_data(self):
         # create a valid request data
