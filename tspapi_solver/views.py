@@ -14,11 +14,12 @@ connection = pika.BlockingConnection(pika.ConnectionParameters(
     host=settings.MESSAGE_BROKER,
     port=settings.MESSAGE_BROKER_PORT,
     virtual_host='/',
+    heartbeat=300,
     credentials=pika.PlainCredentials(settings.MESSAGE_BROKER_USERNAME, settings.MESSAGE_BROKER_PASSWORD)))
 
 channel = connection.channel()
-channel.queue_declare(queue='TSP_INPUT_QUEUE')
-channel.queue_declare(queue='TSP_OUTPUT_QUEUE')
+channel.queue_declare(queue=settings.TSP_INPUT_QUEUE)
+channel.queue_declare(queue=settings.TSP_OUTPUT_QUEUE)
 
 
 class VrpSolverSubmitStateless(APIView):
