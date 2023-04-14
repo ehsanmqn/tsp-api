@@ -1,13 +1,20 @@
 import json
 import pika
+import secrets
+import string
 
 from rest_framework import status
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from app import settings
-from tspapi_solver.serializers import VrpSolverSubmitStatelessSerializer, VrpSolverGetStatusSerializer
+from tspapi_solver.serializers import CreateVrpRequestSerializer, VrpSolverGetStatusSerializer, \
+    CreateVrptwRequestSerializer
+
+# Define the digits container for id generator
+alphabet = string.ascii_letters + string.digits
+
 
 # Establish connection with RabbitMQ server
 connection = pika.BlockingConnection(pika.ConnectionParameters(
@@ -23,13 +30,13 @@ channel.queue_declare(queue=settings.TSP_INPUT_QUEUE)
 channel.queue_declare(queue=settings.TSP_OUTPUT_QUEUE)
 
 
-class VrpSolverSubmitStateless(APIView):
+class CreateVrpRequest(APIView):
     """
-    The VRP solver API to submit job request for process data
+    The VRP solver API to submit job request for process VRP/TSP problem
     """
 
-    parser_classes = (MultiPartParser, FormParser)
-    serializer_class = VrpSolverSubmitStatelessSerializer
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
+    serializer_class = CreateVrpRequestSerializer
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -38,13 +45,20 @@ class VrpSolverSubmitStateless(APIView):
 
     def on_valid_request_data(self, request, data):
 
+        message_id = str(data.get('id'))
+        if message_id is None or message_id == "":
+            message_id = "".join(secrets.choice(alphabet) for i in range(10))
+
+        data['id'] = message_id
+        data['message_type'] = 'VRP' if data['num_vehicles'] > 1 else 'TSP'
+
         # Publish message to queue
         channel.basic_publish(
             exchange='',
             routing_key=settings.TSP_INPUT_QUEUE,
             properties=pika.BasicProperties(
-                reply_to=str(data.get('id')),
-                correlation_id=str(data.get('id')),
+                reply_to=message_id,
+                correlation_id=message_id,
             ),
             body=json.dumps(data)
         )
@@ -53,14 +67,56 @@ class VrpSolverSubmitStateless(APIView):
             "code": status.HTTP_200_OK,
             "message": "Operation successful",
             "result": {
-                "job": data.get('id')
+                "job": message_id
             }
         }, status=status.HTTP_200_OK)
 
 
-class VrpSolverGetStatus(APIView):
+class CreateVrptwRequest(APIView):
     """
-    The VRP solver API to get result of a job based on job id
+    The VRP solver API to submit job request for process VRP/TSP problem
+    """
+
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
+    serializer_class = CreateVrptwRequestSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return self.on_valid_request_data(request, serializer.validated_data)
+
+    def on_valid_request_data(self, request, data):
+
+        message_id = str(data.get('id'))
+        if message_id is None or message_id == "":
+            message_id = "".join(secrets.choice(alphabet) for i in range(10))
+
+        data['id'] = message_id
+        data['message_type'] = 'VRPTW'
+
+        # Publish message to queue
+        channel.basic_publish(
+            exchange='',
+            routing_key=settings.TSP_INPUT_QUEUE,
+            properties=pika.BasicProperties(
+                reply_to=message_id,
+                correlation_id=message_id,
+            ),
+            body=json.dumps(data)
+        )
+
+        return Response({
+            "code": status.HTTP_200_OK,
+            "message": "Operation successful",
+            "result": {
+                "job": message_id
+            }
+        }, status=status.HTTP_200_OK)
+
+
+class RetrieveJobStatus(APIView):
+    """
+    The API to get result of a job based on job identifier
     """
 
     parser_classes = (MultiPartParser, FormParser)
