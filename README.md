@@ -4,6 +4,7 @@ This is a Django project that provides two APIs for solving Vehicle Routing Prob
 This project designed to provide APIs to communicate with the VRP Solver. It is able to use cases related following probles:
 1. Traveling Salesperson Problem (TSP) 
 2. Vehicle Routing Problem (VRP)
+3. Vehicle Routing Problem with Time Window (VRPTW)
 
 ## Usage
 ### Manual
