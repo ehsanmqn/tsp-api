@@ -8,26 +8,29 @@ This project designed to provide APIs to communicate with the VRP Solver. It is 
 ## Usage
 ### Manual
 1. Clone the repository
-2. Create a virtual environment using the command python -m venv env
-3. Activate the virtual environment using the command source env/bin/activate
-4. Install dependencies using the command pip install -r requirements.txt
-5. To run the Django server, use the command python manage.py runserver.
+2. Create a virtual environment using the command `python -m venv venv`
+3. Activate the virtual environment using the command `source venv/bin/activate`
+4. Install dependencies using the command `pip install -r requirements.txt`
+5. Considering the RabbitMQ running on _localhost_ Run this command: `export MESSAGE_BROKER="localhost"`
+6. To run the Django server, use the command `python manage.py runserver`.
 
-### Docker
+### Docker compose
 Run following command in the project directory
 ```bash
-docker-compose up --build
+docker-compose up
 ```
 
 ## Endpoints
-### Submit Job Request API
-`Endpoint`: /vrp-submit/
+The API documentation is provided upon opening each of the following endpoint addresses.
+
+### Submit VRP/TSP problem
+`Endpoint`: http://127.0.0.1:8000/api/v1/vrp-tsp/
 
 `Method`: POST
 
-**Form Data:**
-* `id`: A unique string ID for the job
-* `data`: A JSON object containing the problem data in the following format:
+**Request Data:**
+
+For TSP request, the _num_vehicles_ must be 1. Otherwise, it will be considered as VRP problem.
 ```json
 {
     "id": 1,
@@ -59,14 +62,72 @@ docker-compose up --build
     }
 }
 ```
+Use the job identifier in order to retrieve result related to this job.
+
+
+### Submit VRPTW problem
+`Endpoint`: http://127.0.0.1:8000/api/v1/vrptw/
+
+`Method`: POST
+
+**Request Data:**
+
+```json
+{
+    "message_type": "VRPTW",
+    "id": 1,
+    "depot": 0,
+    "num_vehicles": 2,
+    "locations": [
+        {"latitude": 40.7128, "longitude": -74.0060},
+            {"latitude": 34.0522, "longitude": -118.2437},
+            {"latitude": 41.8781, "longitude": -87.6298},
+            {"latitude": 29.7604, "longitude": -95.3698},
+            {"latitude": 39.9526, "longitude": -75.1652},
+            {"latitude": 33.4484, "longitude": -112.0740},
+            {"latitude": 29.4241, "longitude": -98.4936},
+            {"latitude": 32.7157, "longitude": -117.1611},
+            {"latitude": 32.7767, "longitude": -96.7970},
+            {"latitude": 37.3382, "longitude": -121.8863}
+    ],
+    "time_windows": [
+        [0, 5],  
+        [7, 12],
+        [10, 15],
+        [16, 18],  
+        [10, 13],  
+        [0, 5],  
+        [5, 10],  
+        [0, 4],  
+        [5, 10],  
+        [0, 3]  
+    ],
+    "wait_time": 30,
+    "max_time_vehicle": 30
+}
+```
+**Response:**
+* Status: 200 OK
+* Body:
+```json
+{
+    "code": 200,
+    "message": "Operation successful",
+    "result": {
+        "job": "1"
+    }
+}
+```
+Use the job identifier in order to retrieve result related to this job.
+
 
 ### Get Job Status API
-`Endpoint`: /get-status/
+`Endpoint`: http://127.0.0.1:8000/api/v1/status/?id=1
 
 `Method`: GET
 
 **Query Parameters:**
-* `id`: The unique string ID of the job
+* `id`: The unique identifier of the job provided in earlier APIs response
 
 **Response:**
 * Status: 200 OK
