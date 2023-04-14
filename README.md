@@ -1,5 +1,5 @@
 # Django TSP Solver API
-This is a Django project that provides two APIs for solving Vehicle Routing Problem (VRP). This project uses RabbitMQ as message broker to communicate with the [TSP Solver service](https://github.com/ehsanmqn/tsp_solver).
+This is a Django project that provides two APIs for solving Vehicle Routing Problem (VRP). This project uses RabbitMQ as message broker to communicate with the [TSP Solver service](https://github.com/ehsanmqn/tsp-solver).
 
 This project designed to provide APIs to communicate with the VRP Solver. It is able to use cases related following probles:
 1. Traveling Salesperson Problem (TSP) 
