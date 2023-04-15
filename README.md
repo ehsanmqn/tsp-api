@@ -48,7 +48,9 @@ For TSP request, the _num_vehicles_ must be 1. Otherwise, it will be considered 
             {"latitude": 32.7157, "longitude": -117.1611},
             {"latitude": 32.7767, "longitude": -96.7970},
             {"latitude": 37.3382, "longitude": -121.8863}
-    ]
+    ],
+    "max_distance": 100000,
+    "cost_coefficient": 100
 }
 ```
 **Response:**
