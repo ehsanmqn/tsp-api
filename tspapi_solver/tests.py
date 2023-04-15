@@ -18,7 +18,9 @@ class CreateVrpRequestTestCase(TestCase):
             "id": "1234",
             "depot": 0,
             "num_vehicles": 1,
-            "locations": json.dumps([{"latitude": 40.7128, "longitude": -74.0060}])
+            "locations": json.dumps([{"latitude": 40.7128, "longitude": -74.0060}]),
+            "max_distance": 100000,
+            "cost_coefficient": 100
         }
 
         # post the request to the API endpoint
@@ -41,7 +43,9 @@ class CreateVrpRequestTestCase(TestCase):
             "id": "",
             "depot": 0,
             "num_vehicles": 1,
-            "locations": json.dumps([{"latitude": 40.7128, "longitude": -74.0060}])
+            "locations": json.dumps([{"latitude": 40.7128, "longitude": -74.0060}]),
+            "max_distance": 100000,
+            "cost_coefficient": 100
         }
 
         # post the request to the API endpoint
