@@ -45,11 +45,14 @@ class CreateVrpRequest(APIView):
 
     def on_valid_request_data(self, request, data):
 
+        # Get or create message id
         message_id = str(data.get('id'))
         if message_id is None or message_id == "":
             message_id = "".join(secrets.choice(alphabet) for i in range(10))
 
         data['id'] = message_id
+
+        # Define message type according to number of vehicles
         data['message_type'] = 'VRP' if data['num_vehicles'] > 1 else 'TSP'
 
         # Publish message to queue
@@ -87,11 +90,14 @@ class CreateVrptwRequest(APIView):
 
     def on_valid_request_data(self, request, data):
 
+        # Get or create message id
         message_id = str(data.get('id'))
         if message_id is None or message_id == "":
             message_id = "".join(secrets.choice(alphabet) for i in range(10))
 
         data['id'] = message_id
+
+        # Define message type
         data['message_type'] = 'VRPTW'
 
         # Publish message to queue
