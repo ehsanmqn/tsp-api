@@ -12,8 +12,9 @@ This project designed to provide APIs to communicate with the VRP Solver. It is 
 2. Create a virtual environment using the command `virtualenv -p python3 venv`
 3. Activate the virtual environment using the command `source venv/bin/activate`
 4. Install dependencies using the command `pip install -r requirements.txt`
-5. Considering the RabbitMQ is running on _localhost_, Run this command: `export MESSAGE_BROKER="localhost"`
-6. To run the Django server, use the command `python manage.py runserver 0.0.0.0:8000`.
+5. Collect static files using command `python manage.py collectstatic`
+6. Considering the RabbitMQ is running on _localhost_, Run this command: `export MESSAGE_BROKER="localhost"`
+7. To run the Django server, use the command `python manage.py runserver 0.0.0.0:8000`.
 
 ### Docker compose
 Run following command in the project directory
