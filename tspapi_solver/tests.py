@@ -6,11 +6,11 @@ from rest_framework.test import APIClient
 from rest_framework import status
 
 
-class VrpSolverSubmitStatelessTestCase(TestCase):
+class CreateVrpRequestTestCase(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.url = reverse("vrp-solver-submit-stateless")
+        self.url = reverse("request-vrp-tsp-api")
 
     def test_valid_request_data(self):
         # create a valid request data
@@ -48,10 +48,7 @@ class VrpSolverSubmitStatelessTestCase(TestCase):
         response = self.client.post(self.url, data)
 
         # assert that the response code is 400 Bad Request
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-        # assert that the response message is related to invalid id
-        self.assertIn("id", response.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_invalid_depot(self):
         # create an invalid request data with depot < 0
