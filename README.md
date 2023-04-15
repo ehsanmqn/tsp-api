@@ -198,5 +198,6 @@ This project depends on the following packages:
 The CreateVrpRequest API view has 5 implemented tests. To conduct tests on this view, utilize the following command:
 
 ```bash
+export MESSAGE_BROKER="localhost"
 python manage.py test
 ```
