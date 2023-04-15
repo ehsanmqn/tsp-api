@@ -26,7 +26,7 @@ class CreateVrptwRequestSerializer(serializers.Serializer):
     max_time_vehicle = serializers.IntegerField(required=True, min_value=0, help_text="An upper bound for slack (the wait times at the locations).")
 
 
-class VrpSolverGetStatusSerializer(serializers.Serializer):
+class RetrieveJobStatusSerializer(serializers.Serializer):
     """
     Input serializer for the VRP solver get status
     """

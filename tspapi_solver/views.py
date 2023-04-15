@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from app import settings
-from tspapi_solver.serializers import CreateVrpRequestSerializer, VrpSolverGetStatusSerializer, \
+from tspapi_solver.serializers import CreateVrpRequestSerializer, RetrieveJobStatusSerializer, \
     CreateVrptwRequestSerializer
 
 # Define the digits container for id generator
@@ -126,7 +126,7 @@ class RetrieveJobStatus(APIView):
     """
 
     parser_classes = (MultiPartParser, FormParser)
-    serializer_class = VrpSolverGetStatusSerializer
+    serializer_class = RetrieveJobStatusSerializer
 
     def get(self, request):
         serializer = self.serializer_class(data=request.query_params)
