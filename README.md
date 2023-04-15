@@ -183,7 +183,7 @@ If the job does not exist, the response will be:
 ```
 
 ## Message Broker
-The project uses RabbitMQ as the message broker to handle the communication between the VRP solver and the client. The connection parameters are read from Django settings file.
+The project uses RabbitMQ as the message broker to handle the communication between the TSP solver service and the client. The connection parameters are read from Django settings file.
 
 The input queue name and output queue name are set in Django settings file as well.
 
