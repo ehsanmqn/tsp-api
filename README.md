@@ -79,7 +79,7 @@ Use the job identifier in order to retrieve result related to this job.
 ```json
 {
     "message_type": "VRPTW",
-    "id": 1,
+    "id": "968ae423-2a40-447e-943c-de18b3a2ef12",
     "depot": 0,
     "num_vehicles": 2,
     "locations": [
@@ -118,15 +118,15 @@ Use the job identifier in order to retrieve result related to this job.
     "code": 200,
     "message": "Operation successful",
     "result": {
-        "job": "1"
+        "job": "968ae423-2a40-447e-943c-de18b3a2ef12"
     }
 }
 ```
-Use the job identifier in order to retrieve result related to this job.
-
 
 ### Get Job Status API
-`Endpoint`: http://127.0.0.1:8000/api/v1/status/?id=1
+To retrieve results related to a particular job, utilize its identifier. However, keep in mind that as this project is stateless and the tsp-solver requires time to solve the problem and publish the results on topic, there may be instances where a valid id returns a 404 error. If this occurs, you will need to make the request again until the result is obtained.
+
+`Endpoint`: http://127.0.0.1:8000/api/v1/status/?id=968ae423-2a40-447e-943c-de18b3a2ef12
 
 `Method`: GET
 
