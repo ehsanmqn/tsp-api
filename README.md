@@ -126,6 +126,9 @@ Use the job identifier in order to retrieve result related to this job.
 ### Get Job Status API
 To retrieve results related to a particular job, utilize its identifier. However, keep in mind that as this project is stateless and the tsp-solver requires time to solve the problem and publish the results on topic, there may be instances where a valid id returns a 404 error. If this occurs, you will need to make the request again until the result is obtained.
 
+The API extracts the ID from the validated data and consumes messages from the TSP_OUTPUT_QUEUE using the pika library. It checks each message for a matching correlation ID and returns the result if found. If no matching message is found, it Nack all the consumed messages and returns a 404 NOT FOUND response.
+
+
 `Endpoint`: http://127.0.0.1:8000/api/v1/status/?id=968ae423-2a40-447e-943c-de18b3a2ef12
 
 `Method`: GET
