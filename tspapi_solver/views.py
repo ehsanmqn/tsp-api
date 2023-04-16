@@ -139,10 +139,16 @@ class RetrieveJobStatus(APIView):
         # Consume message from  queue with matching correlation ID
         method_frame, header_frame, body = channel.basic_get(queue=settings.TSP_OUTPUT_QUEUE)
 
-        if method_frame:
+        delivery_tags = []
+        while method_frame is not None:
             # Check correlation ID and return status if it matches
             if header_frame.correlation_id == correlation_id:
+                # Set message visited
                 channel.basic_ack(method_frame.delivery_tag)
+
+                # Queue unmatched messages
+                for item in delivery_tags:
+                    channel.basic_nack(item, requeue=True)
 
                 return Response({
                     "code": status.HTTP_200_OK,
@@ -150,15 +156,17 @@ class RetrieveJobStatus(APIView):
                     "result": json.loads(body.decode())
                 }, status=status.HTTP_200_OK)
 
-            # If correlation ID does not match, re-queue message and return error
-            channel.basic_nack(method_frame.delivery_tag, requeue=True)
+            # If correlation ID does not match, add message tag to a container
+            delivery_tags.append(method_frame.delivery_tag)
 
-            return Response({
-                "code": status.HTTP_404_NOT_FOUND,
-                "message": "No matching message found with message id = {}".format(correlation_id),
-            }, status=status.HTTP_404_NOT_FOUND)
+            # get new message
+            method_frame, header_frame, body = channel.basic_get(queue=settings.TSP_OUTPUT_QUEUE)
+
+        # Queue unmatched messages
+        for item in delivery_tags:
+            channel.basic_nack(item, requeue=True)
 
         return Response({
             "code": status.HTTP_404_NOT_FOUND,
-            "message": "No messages available",
+            "message": "No matching message found with message id = {}".format(correlation_id),
         }, status=status.HTTP_404_NOT_FOUND)
