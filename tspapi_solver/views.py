@@ -1,7 +1,6 @@
 import json
 import pika
-import secrets
-import string
+import uuid
 
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
@@ -11,9 +10,6 @@ from rest_framework.views import APIView
 from app import settings
 from tspapi_solver.serializers import CreateVrpRequestSerializer, RetrieveJobStatusSerializer, \
     CreateVrptwRequestSerializer
-
-# Define the digits container for id generator
-alphabet = string.ascii_letters + string.digits
 
 
 # Establish connection with RabbitMQ server
@@ -48,7 +44,7 @@ class CreateVrpRequest(APIView):
         # Get or create message id
         message_id = str(data.get('id'))
         if message_id is None or message_id == "":
-            message_id = "".join(secrets.choice(alphabet) for i in range(10))
+            message_id = str(uuid.uuid4())
 
         data['id'] = message_id
 
@@ -93,7 +89,7 @@ class CreateVrptwRequest(APIView):
         # Get or create message id
         message_id = str(data.get('id'))
         if message_id is None or message_id == "":
-            message_id = "".join(secrets.choice(alphabet) for i in range(10))
+            message_id = str(uuid.uuid4())
 
         data['id'] = message_id
 
