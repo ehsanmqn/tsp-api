@@ -177,14 +177,6 @@ If the job is not yet completed, the response will be:
 }
 ```
 
-If the job does not exist, the response will be:
-```json
-{
-  "code": 404,
-  "message": "No messages available"
-}
-```
-
 ## Message Broker
 The project uses RabbitMQ as the message broker to handle the communication between the TSP solver service and the client. The connection parameters are read from Django settings file.
 
